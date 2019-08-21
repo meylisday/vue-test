@@ -22,15 +22,13 @@
             </span>
           </div>
           <div class="cell" v-for="{type} in headers" :key="type">
-            <div v-if="hasNotification(formated, type)" :style="{ width: '100%' }">
-              <slot
-                name="notification"
-                v-for="(event, index) in getEvents(formated, type)"
-                v-bind:event="event"
-              >
-                <span class="notification" :key="`${type}_${index}`">{{event.label}}</span>
-              </slot>
-            </div>
+            <ul v-if="hasNotification(formated, type)" :style="{ width: '100%' }">
+              <li v-for="(event, index) in getEvents(formated, type)" :key="index">
+                <slot name="event" v-bind:event="event">
+                  <span class="notification" :key="`${type}_${index}`">{{event.label}}</span>
+                </slot>
+              </li>
+            </ul>
           </div>
         </div>
       </li>
