@@ -7,7 +7,7 @@
 }
 .calendar-header-add {
   bottom: 0;
-  box-shadow: 0.1rem 0.1rem 1rem rgb(0, 0, 0, 0.25);
+  box-shadow: 0.1rem 0.1rem 0.25rem rgba(0, 0, 0, 0.25);
   font-weight: bold;
   height: 2rem;
   left: 0;
@@ -22,7 +22,7 @@
 }
 .calendar-event {
   border-radius: 0.25rem;
-  box-shadow: 0.1rem 0.1rem 1rem rgb(0, 0, 0, 0.25);
+  box-shadow: 0.1rem 0.1rem 0.25rem rgba(0, 0, 0, 0.25);
   color: #fff;
   display: flex;
   flex-direction: column;
