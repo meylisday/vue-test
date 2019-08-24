@@ -1,31 +1,31 @@
 <template>
   <div class="calendar-container">
-    <div class="row" :style="{ gridTemplateColumns }">
+    <div :style="{ gridTemplateColumns }" class="row">
       <div></div>
-      <div class="calendar-header" v-for="(header, index) in headers" :key="index">
-        <slot name="header" v-bind:header="header">{{header.label}}</slot>
+      <div v-for="(header, index) in headers" :key="index" class="calendar-header">
+        <slot :header="header" name="header">{{ header.label }}</slot>
       </div>
     </div>
     <ul class="scrollable-content" @scroll="handleScroll">
       <li
+        v-for="({ isStartOfMonth, isToday, weekDay, day, year, formated, month }, index) in datesTable"
         :key="formated"
         class="grid"
-        v-for="({isStartOfMonth, isToday, weekDay, day, year, formated, month}, index) in datesTable"
       >
-        <div v-if="isStartOfMonth || !index" class="month-separator">{{ month }}, {{year}}</div>
-        <div class="row" :style="{ gridTemplateColumns }">
+        <div v-if="isStartOfMonth || !index" class="month-separator">{{ month }}, {{ year }}</div>
+        <div :style="{ gridTemplateColumns }" class="row">
           <div class="cell">
-            <span class="day" :class="{today: isToday}">
+            <span :class="{ today: isToday }" class="day">
               {{ weekDay }}
               <br />
               {{ day }}
             </span>
           </div>
-          <div class="cell" v-for="{type} in headers" :key="type">
+          <div v-for="{ type } in headers" :key="type" class="cell">
             <ul v-if="hasNotification(formated, type)" :style="{ width: '100%' }">
               <li v-for="(event, index) in getEvents(formated, type)" :key="index">
-                <slot name="event" v-bind:event="event">
-                  <span class="notification" :key="`${type}_${index}`">{{event.label}}</span>
+                <slot :event="event" name="event">
+                  <span :key="`${type}_${index}`" class="notification">{{ event.label }}</span>
                 </slot>
               </li>
             </ul>
@@ -37,23 +37,23 @@
 </template>
 
 <script>
-import moment from "moment";
-import { invoke, debounce, find, filter } from "lodash-es";
+import moment from 'moment'
+import { invoke, debounce, find, filter } from 'lodash-es'
 
 export default {
-  name: "Calendar",
+  name: 'CalendarGrid',
   props: {
     headers: {
       required: true,
       type: Array
     },
     locale: {
-      default: "ru",
+      default: 'ru',
       required: false,
       type: String
     },
     format: {
-      default: "MM/DD/YYYY",
+      default: 'MM/DD/YYYY',
       required: false,
       type: String
     },
@@ -67,71 +67,67 @@ export default {
       type: Array
     },
     loadMore: {
+      default: () => {},
       required: false,
       type: Function
     }
   },
-  created: function() {
-    moment.locale(this.locale);
+  data: function() {
+    return {
+      startDay: moment().subtract(this.offset, 'days'),
+      endDay: moment().add(this.offset, 'days')
+    }
   },
   computed: {
     today: function() {
-      return moment().format(this.format);
+      return moment().format(this.format)
     },
     gridTemplateColumns: function() {
-      return `5.75rem repeat(${this.headers.length}, 1fr)`;
+      return `5.75rem repeat(${this.headers.length}, 1fr)`
     },
     datesTable: function() {
-      const dates = [];
+      const dates = []
 
-      for (let i = 0; i < this.endDay.diff(this.startDay, "days"); i++) {
-        const currentDate = moment(this.startDay).add(i, "days");
-        const isToday = moment().format(this.format) === currentDate.format(this.format);
-        const isStartOfMonth = currentDate.date() === 1;
+      for (let i = 0; i < this.endDay.diff(this.startDay, 'days'); i++) {
+        const currentDate = moment(this.startDay).add(i, 'days')
+        const isToday = moment().format(this.format) === currentDate.format(this.format)
+        const isStartOfMonth = currentDate.date() === 1
 
         dates.push({
           isStartOfMonth,
           isToday,
-          day: currentDate.format("D"),
+          day: currentDate.format('D'),
           formated: currentDate.format(this.format),
-          month: currentDate.format("MMMM"),
-          weekDay: currentDate.format("dd"),
-          year: currentDate.format("YYYY")
-        });
+          month: currentDate.format('MMMM'),
+          weekDay: currentDate.format('dd'),
+          year: currentDate.format('YYYY')
+        })
       }
 
-      return dates;
+      return dates
     }
   },
-  data: function() {
-    return {
-      startDay: moment().subtract(this.offset, "days"),
-      endDay: moment().add(this.offset, "days")
-    };
+  created: function() {
+    moment.locale(this.locale)
   },
   methods: {
     getEvents: function(date, type) {
-      return filter(this.notifications, { date, type });
+      return filter(this.notifications, { date, type })
     },
     hasNotification: function(date, type) {
-      return find(this.notifications, { date, type });
+      return find(this.notifications, { date, type })
     },
     handleScroll: debounce(function(e) {
-      const { scrollHeight, scrollTop, clientHeight } = e.target;
+      const { scrollHeight, scrollTop, clientHeight } = e.target
 
       if (scrollTop + clientHeight + 150 >= scrollHeight) {
-        this.endDay = moment(this.endDay).add(this.offset, "days");
+        this.endDay = moment(this.endDay).add(this.offset, 'days')
 
-        invoke(
-          this,
-          "loadMore",
-          this.startDay.format(this.format),
-          this.endDay.format(this.format)
-        );
+        invoke(this, 'loadMore', this.startDay.format(this.format), this.endDay.format(this.format))
       }
     }, 50)
   }
-};
+}
 </script>
 
 <!-- Add 'scoped' attribute to limit CSS to this component only -->

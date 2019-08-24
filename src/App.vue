@@ -1,21 +1,21 @@
 <template>
   <div id="app">
-    <home-header/>
-    <router-view/>
-    <home-footer/>
+    <common-header />
+    <router-view />
+    <common-footer />
   </div>
 </template>
 
 <script>
-import Header from '@/components/header'
-import Footer from '@/components/footer'
+import CommonHeader from '@/components/header'
+import CommonFooter from '@/components/footer'
 
 export default {
   name: 'App',
   components: {
-    'home-header': Header,
-    'home-footer': Footer
-  },
+    CommonHeader,
+    CommonFooter
+  }
 }
 </script>
 

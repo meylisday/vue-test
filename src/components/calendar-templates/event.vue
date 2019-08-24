@@ -1,14 +1,13 @@
 <template>
-  <div class="calendar-event" :style="{ backgroundColor: color }">
-    <p class="calendar-event-label">{{event.label}}</p>
-    <p>{{event.number}}</p>
+  <div :style="{ backgroundColor: color }" class="calendar-event">
+    <p class="calendar-event-label">{{ event.label }}</p>
+    <p>{{ event.number }}</p>
   </div>
 </template>
 
 <script>
-
 export default {
-  name: "calendar-event",
+  name: 'CalendarEvent',
   props: {
     event: {
       required: true,
@@ -17,10 +16,10 @@ export default {
     color: {
       required: false,
       type: String,
-      default: "#6e8cfb",
+      default: '#6e8cfb'
     }
   }
-};
+}
 </script>
 
 <style scoped>
@@ -35,5 +34,5 @@ export default {
 }
 .calendar-event-label {
   font-weight: 500;
-}
-</style>>
+}</style
+>>
