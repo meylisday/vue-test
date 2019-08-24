@@ -1,12 +1,21 @@
 <template>
   <div id="app">
-    <router-view/>
+    <common-header />
+    <router-view />
+    <common-footer />
   </div>
 </template>
 
 <script>
+import CommonHeader from '@/components/header'
+import CommonFooter from '@/components/footer'
+
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    CommonHeader,
+    CommonFooter
+  }
 }
 </script>
 

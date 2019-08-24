@@ -1,0 +1,21 @@
+.calendar-custom-header {
+  flex-direction: column;
+  justify-content: center;
+  padding: 1rem;
+  position: relative;
+  width: 100%;
+}
+.calendar-custom-header-add {
+  bottom: 0;
+  font-weight: bold;
+  left: 0;
+  width: 2rem;
+  height: 2rem;
+  position: absolute;
+}
+.calendar-custom-header-label {
+  display: inline-flex;
+  text-transform: uppercase;
+  justify-content: center;
+  font-weight: 500;
+}
