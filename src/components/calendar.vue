@@ -1,15 +1,14 @@
 <template>
-  <div class="calendar-container">
+  <div class="calendar-wrapper">
     <div :style="{ gridTemplateColumns }" class="row">
       <div></div>
-      <div v-for="(header, index) in headers" :key="index" class="calendar-header">
+      <div v-for="(header, index) in headers" :key="index" class="calendar-header-wrapper">
         <slot :header="header" name="header">{{ header.label }}</slot>
       </div>
     </div>
     <ul class="scrollable-content" @scroll="handleScroll">
       <li
-        v-for="({ isStartOfMonth, isToday, weekDay, day, year, formated, month },
-        index) in datesTable"
+        v-for="({ isStartOfMonth, isToday, weekDay, day, year, formated, month }, index) in datesTable"
         :key="formated"
         class="grid"
       >
@@ -22,11 +21,16 @@
               {{ day }}
             </span>
           </div>
-          <div v-for="{ type } in headers" :key="type" class="cell">
+          <div
+            v-for="{ type } in headers"
+            :key="type"
+            class="cell"
+            @click.self="handleEventCreation($event, type, formated)"
+          >
             <ul v-if="hasNotification(formated, type)" :style="{ width: '100%' }">
               <li v-for="(event, index) in getEvents(formated, type)" :key="index">
                 <slot :event="event" name="event">
-                  <span :key="`${type}_${index}`" class="notification">{{ event.label }}</span>
+                  <span :key="`${type}_${index}`">{{ event.label }}</span>
                 </slot>
               </li>
             </ul>
@@ -63,13 +67,16 @@ export default {
       required: false,
       type: Number
     },
-    notifications: {
+    events: {
       required: true,
       type: Array
     },
-    loadMore: {
-      default: () => {},
-      required: false,
+    handleEventCreation: {
+      required: true,
+      type: Function
+    },
+    handleLoadMore: {
+      required: true,
       type: Function
     }
   },
@@ -113,10 +120,10 @@ export default {
   },
   methods: {
     getEvents: function(date, type) {
-      return filter(this.notifications, { date, type })
+      return filter(this.events, { date, type })
     },
     hasNotification: function(date, type) {
-      return find(this.notifications, { date, type })
+      return find(this.events, { date, type })
     },
     handleScroll: debounce(function(e) {
       const { scrollHeight, scrollTop, clientHeight } = e.target
@@ -124,16 +131,15 @@ export default {
       if (scrollTop + clientHeight + 150 >= scrollHeight) {
         this.endDay = moment(this.endDay).add(this.offset, 'days')
 
-        invoke(this, 'loadMore', this.startDay.format(this.format), this.endDay.format(this.format))
+        invoke(this, 'handleLoadMore', this.startDay.format(this.format), this.endDay.format(this.format))
       }
     }, 50)
   }
 }
 </script>
 
-<!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style scoped>
-.calendar-container {
+.calendar-wrapper {
   bottom: 0;
   display: flex;
   flex-direction: column;
@@ -142,11 +148,11 @@ export default {
   margin: 0;
   padding: 0;
   position: absolute;
+  position: relative;
   top: 0;
   width: 100%;
-  position: relative;
 }
-.calendar-header {
+.calendar-header-wrapper {
   display: flex;
   justify-content: center;
   padding: 1rem;
@@ -169,19 +175,23 @@ export default {
   justify-content: center;
   margin: 0 0.1rem;
   min-height: 4.5rem;
-  padding: 0.5rem;
+  padding: 0.75rem;
+  cursor: pointer;
 }
 .day {
   border-radius: 50%;
   cursor: pointer;
   font-size: 0.85rem;
+  font-weight: 500;
   height: 3rem;
   padding: 0.25rem;
+  text-transform: capitalize;
   width: 3rem;
 }
 .today {
-  color: #fff;
   background: #6e8cfb;
+  box-shadow: 0.1rem 0.1rem 0.25rem rgba(0, 0, 0, 0.25);
+  color: #fff;
 }
 .today:hover {
   background: #647cd2;
@@ -190,12 +200,6 @@ export default {
   font-weight: bold;
   padding: 0.5rem 1rem;
   text-align: start;
-}
-.notification {
-  background: rgb(255, 208, 0);
-  border-radius: 0.25rem;
-  display: flex;
-  margin: 0.1rem;
-  padding: 0.5rem;
+  text-transform: capitalize;
 }
 </style>

@@ -19,7 +19,7 @@ module.exports = {
         "semi": false,
         "trailingComma": "none",
         "endOfLine":"auto",
-        "printWidth": 100
+        "printWidth": 120
       }
     ]
   },

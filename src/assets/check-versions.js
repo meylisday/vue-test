@@ -35,11 +35,7 @@ module.exports = function() {
 
     if (!semver.satisfies(mod.currentVersion, mod.versionRequirement)) {
       warnings.push(
-        mod.name +
-          ': ' +
-          chalk.red(mod.currentVersion) +
-          ' should be ' +
-          chalk.green(mod.versionRequirement)
+        mod.name + ': ' + chalk.red(mod.currentVersion) + ' should be ' + chalk.green(mod.versionRequirement)
       )
     }
   }
