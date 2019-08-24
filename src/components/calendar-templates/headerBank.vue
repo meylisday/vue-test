@@ -6,7 +6,13 @@
     </span>
     <p>платежи до: 16:30</p>
     <p>открыто до: 17:30</p>
-    <b-button class="calendar-custom-header-add" type="is-light" icon-left="plus" size="is-small" rounded></b-button>
+    <b-button
+      class="calendar-custom-header-add"
+      type="is-light"
+      icon-left="plus"
+      size="is-small"
+      rounded
+    ></b-button>
   </div>
 </template>
 
