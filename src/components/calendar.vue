@@ -182,6 +182,7 @@ export default {
   border-radius: 50%;
   cursor: pointer;
   font-size: 0.85rem;
+  font-weight: 500;
   height: 3rem;
   padding: 0.25rem;
   text-transform: capitalize;
