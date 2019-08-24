@@ -9,11 +9,11 @@
     >
       <!-- Dynamic Header Template -->
       <template v-slot:header="{ header }">
-        <component :is="header.displayAs" :data="header" :add="addEvent"></component>
+        <component :is="header.displayAs" :data="header" :add="addEvent" />
       </template>
       <!-- Dynamic Notification Template -->
       <template v-slot:event="{ event }">
-        <calendar-event :event="event" :color="getColor(headers, event)"></calendar-event>
+        <calendar-event :event="event" :color="getColor(headers, event)" @click.native="viewEvent($event, event)" />
       </template>
     </calendar-grid>
   </div>
@@ -92,7 +92,8 @@ export default {
       console.log(params)
     },
     getColor: (headers, { type }) => get(find(headers, { type }), 'color', '#ccc'),
-    addEvent: (...params) => console.log(params)
+    addEvent: (...params) => console.log(params),
+    viewEvent: (...params) => console.log(params)
   }
 }
 </script>
