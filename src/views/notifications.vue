@@ -1,14 +1,15 @@
 <template>
   <div class="page-wrapper">
     <calendar-grid
-      :notifications="notifications"
+      :events="events"
+      :handle-event-creation="addEvent"
+      :handle-load-more="loadMore"
       :headers="headers"
       :locale="locale"
-      :load-more="loadMore"
     >
       <!-- Dynamic Header Template -->
       <template v-slot:header="{ header }">
-        <component :is="header.displayAs" :data="header"></component>
+        <component :is="header.displayAs" :data="header" :add="addEvent"></component>
       </template>
       <!-- Dynamic Notification Template -->
       <template v-slot:event="{ event }">
@@ -31,7 +32,7 @@ import {
 } from '@/components/calendar-templates'
 
 export default {
-  name: 'CalendarNotifications',
+  name: 'CalendarPage',
   components: {
     CalendarGrid,
     CalendarEvent,
@@ -47,13 +48,13 @@ export default {
           type: 'bank',
           label: 'Банк',
           displayAs: 'calendar-header-bank',
-          color: 'green'
+          color: '#66bb6a'
         },
         {
           type: 'taxes',
           label: 'Налоговая',
           displayAs: 'calendar-header-taxes',
-          color: 'orange'
+          color: '#ffa726'
         },
         {
           type: 'tasks',
@@ -68,7 +69,7 @@ export default {
           color: 'red'
         }
       ],
-      notifications: [
+      events: [
         {
           date: '08/21/2019',
           type: 'taxes',
@@ -90,7 +91,8 @@ export default {
     loadMore: function(...params) {
       console.log(params)
     },
-    getColor: (headers, { type }) => get(find(headers, { type }), 'color', '#ccc')
+    getColor: (headers, { type }) => get(find(headers, { type }), 'color', '#ccc'),
+    addEvent: (...params) => console.log(params)
   }
 }
 </script>

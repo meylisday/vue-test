@@ -1,17 +1,18 @@
 <template>
-  <div class="calendar-custom-header">
-    <span class="calendar-custom-header-label">
+  <div class="calendar-header">
+    <span class="calendar-header-label">
       {{ data.label }}
       <b-icon icon="phone-in-talk"></b-icon>
     </span>
     <p>перерыв: <span>13 - 14</span></p>
     <p>открыто до: <span>17:30</span></p>
     <b-button
-      class="calendar-custom-header-add"
-      type="is-light"
+      class="calendar-header-add"
       icon-left="plus"
-      size="is-small"
       rounded
+      size="is-small"
+      type="is-light"
+      @click="onAddClick"
     ></b-button>
   </div>
 </template>
@@ -25,6 +26,16 @@ export default {
     data: {
       required: true,
       type: Object
+    },
+    add: {
+      default: () => {},
+      required: false,
+      type: Function
+    }
+  },
+  methods: {
+    onAddClick: function(event) {
+      this.add(event, this.data.type)
     }
   }
 }

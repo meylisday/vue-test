@@ -10,11 +10,7 @@ export default {
   components: {},
   data() {
     return {
-      groceryList: [
-        { id: 1, text: 'Овощи' },
-        { id: 2, text: 'Сыр' },
-        { id: 3, text: 'Что там ещё люди едят?' }
-      ]
+      groceryList: [{ id: 1, text: 'Овощи' }, { id: 2, text: 'Сыр' }, { id: 3, text: 'Что там ещё люди едят?' }]
     }
   }
 }

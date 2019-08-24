@@ -16,23 +16,8 @@ export default {
     color: {
       required: false,
       type: String,
-      default: '#6e8cfb'
+      default: '#66bb6a'
     }
   }
 }
 </script>
-
-<style scoped>
-.calendar-event {
-  display: flex;
-  flex-direction: column;
-  text-align: start;
-  padding: 0.5rem;
-  border-radius: 0.25rem;
-  color: #fff;
-  box-shadow: 0.1rem 0.1rem 1rem grey;
-}
-.calendar-event-label {
-  font-weight: 500;
-}</style
->>
