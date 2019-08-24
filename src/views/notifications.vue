@@ -1,6 +1,11 @@
 <template>
   <div class="page-wrapper">
-    <calendar-grid :notifications="notifications" :headers="headers" :locale="locale" :load-more="loadMore">
+    <calendar-grid
+      :notifications="notifications"
+      :headers="headers"
+      :locale="locale"
+      :load-more="loadMore"
+    >
       <!-- Dynamic Header Template -->
       <template v-slot:header="{ header }">
         <component :is="header.displayAs" :data="header"></component>

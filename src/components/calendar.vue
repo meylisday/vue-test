@@ -8,7 +8,8 @@
     </div>
     <ul class="scrollable-content" @scroll="handleScroll">
       <li
-        v-for="({ isStartOfMonth, isToday, weekDay, day, year, formated, month }, index) in datesTable"
+        v-for="({ isStartOfMonth, isToday, weekDay, day, year, formated, month },
+        index) in datesTable"
         :key="formated"
         class="grid"
       >

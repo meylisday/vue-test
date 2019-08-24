@@ -4,7 +4,13 @@
       {{ data.label }}
     </span>
     <div></div>
-    <b-button class="calendar-custom-header-add" type="is-light" icon-left="plus" size="is-small" rounded></b-button>
+    <b-button
+      class="calendar-custom-header-add"
+      type="is-light"
+      icon-left="plus"
+      size="is-small"
+      rounded
+    ></b-button>
   </div>
 </template>
 
