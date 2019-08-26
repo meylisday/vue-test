@@ -28,7 +28,7 @@ export default {
       type: Object
     },
     add: {
-      default: () => {},
+      default: () => {}, //arrow function
       required: false,
       type: Function
     }

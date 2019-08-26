@@ -7,10 +7,14 @@
       :headers="headers"
       :locale="locale"
     >
+      <!-- custom event and kebab-case with init custom event -->
+
       <!-- Dynamic Header Template -->
       <template v-slot:header="{ header }">
         <component :is="header.displayAs" :data="header" :add="addEvent" />
       </template>
+      <!-- slots -->
+
       <!-- Dynamic Notification Template -->
       <template v-slot:event="{ event }">
         <calendar-event :event="event" :color="getColor(headers, event)" @click.native="viewEvent($event, event)" />
@@ -78,7 +82,7 @@ export default {
           id: '1'
         },
         {
-          date: '08/19/2019',
+          date: '08/23/2019',
           type: 'bank',
           label: 'Отправить сведения о сделке',
           number: 'Номер',
@@ -88,9 +92,7 @@ export default {
     }
   },
   methods: {
-    loadMore: function(...params) {
-      console.log(params)
-    },
+    loadMore: (...params) => console.log(params), //spread operator
     getColor: (headers, { type }) => get(find(headers, { type }), 'color', '#ccc'),
     addEvent: (...params) => console.log(params),
     viewEvent: (...params) => console.log(params)
