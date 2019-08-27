@@ -2,7 +2,7 @@
   <div class="calendar-header">
     <span class="calendar-header-label">
       {{ data.label }}
-      <b-icon icon="phone-in-talk"></b-icon>
+      <b-icon icon="phone-in-talk" />
     </span>
     <p>перерыв: <span>13 - 14</span></p>
     <p>открыто до: <span>17:30</span></p>
@@ -13,7 +13,7 @@
       size="is-small"
       type="is-light"
       @click="onAddClick"
-    ></b-button>
+    />
   </div>
 </template>
 

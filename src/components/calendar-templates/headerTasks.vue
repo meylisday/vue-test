@@ -11,7 +11,7 @@
       size="is-small"
       type="is-light"
       @click="onAddClick"
-    ></b-button>
+    />
   </div>
 </template>
 

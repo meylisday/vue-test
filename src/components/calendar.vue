@@ -1,7 +1,10 @@
 <template>
-  <div class="calendar-wrapper">
+  <div id="calendar-component" class="calendar-wrapper">
     <div :style="{ gridTemplateColumns }" class="row">
-      <div></div>
+      <div class="timetrack-header">
+        <b-button rounded size="is-small" type="is-light" @click="scrollToToday">Сегодня</b-button>
+        <b-button rounded size="is-small" type="is-light" disabled>К дате</b-button>
+      </div>
       <div v-for="(header, index) in headers" :key="index" class="calendar-header-wrapper">
         <slot :header="header" name="header">{{ header.label }}</slot>
       </div>
@@ -15,7 +18,7 @@
         <div v-if="isStartOfMonth || !index" class="month-separator">{{ month }}, {{ year }}</div>
         <div :style="{ gridTemplateColumns }" class="row">
           <div class="cell">
-            <span :class="{ today: isToday }" class="day">
+            <span :id="isToday ? 'today' : null" :class="{ today: isToday }" class="day">
               {{ weekDay }}
               <br />
               {{ day }}
@@ -125,6 +128,12 @@ export default {
     hasNotification: function(date, type) {
       return find(this.events, { date, type })
     },
+    scrollToToday: () => {
+      document.getElementById('today').scrollIntoView({
+        behavior: 'smooth',
+        block: 'end'
+      })
+    },
     handleScroll: debounce(function(e) {
       const { scrollHeight, scrollTop, clientHeight } = e.target
 
@@ -150,6 +159,20 @@ export default {
   position: absolute;
   position: relative;
   top: 0;
+  width: 100%;
+}
+.timetrack-header {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.timetrack-header > * {
+  box-shadow: var(--baseShadow);
+  font-size: 0.7rem;
+  font-weight: 500;
+  margin: 0.5rem;
+  text-transform: uppercase;
   width: 100%;
 }
 .calendar-header-wrapper {
@@ -190,7 +213,7 @@ export default {
 }
 .today {
   background: #6e8cfb;
-  box-shadow: 0.1rem 0.1rem 0.25rem rgba(0, 0, 0, 0.25);
+  box-shadow: var(--baseShadow);
   color: #fff;
 }
 .today:hover {
