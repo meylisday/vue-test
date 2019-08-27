@@ -1,6 +1,6 @@
 {
   "name": "vue-test",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A Vue.js project",
   "author": "victoria_newsite <viktoriya@newsite.by>",
   "private": true,
@@ -19,6 +19,7 @@
     "lodash-es": "^4.17.15",
     "moment": "^2.24.0",
     "vue": "^2.5.2",
+    "vue-moment": "^4.0.0",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {

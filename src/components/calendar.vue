@@ -1,5 +1,5 @@
 <template>
-  <div id="calendar-component" class="calendar-wrapper">
+  <div class="calendar-wrapper">
     <div :style="{ gridTemplateColumns }" class="row">
       <div class="timetrack-header">
         <b-button rounded size="is-small" type="is-light" @click="scrollToToday">Сегодня</b-button>
@@ -9,7 +9,7 @@
         <slot :header="header" name="header">{{ header.label }}</slot>
       </div>
     </div>
-    <ul class="scrollable-content" @scroll="handleScroll">
+    <ul ref="scrollableContent" class="scrollable-content" @scroll="handleScroll">
       <li
         v-for="({ isStartOfMonth, isToday, weekDay, day, year, formated, month }, index) in datesTable"
         :key="formated"
@@ -45,8 +45,7 @@
 </template>
 
 <script>
-import moment from 'moment'
-import { invoke, debounce, find, filter } from 'lodash-es'
+import { debounce, find, filter } from 'lodash-es'
 
 export default {
   name: 'CalendarGrid',
@@ -54,11 +53,6 @@ export default {
     headers: {
       required: true,
       type: Array
-    },
-    locale: {
-      default: 'ru',
-      required: false,
-      type: String
     },
     format: {
       default: 'MM/DD/YYYY',
@@ -85,13 +79,13 @@ export default {
   },
   data: function() {
     return {
-      startDay: moment().subtract(this.offset, 'days'),
-      endDay: moment().add(this.offset, 'days')
+      startDay: this.$moment().subtract(this.offset, 'days'),
+      endDay: this.$moment().add(this.offset, 'days')
     }
   },
   computed: {
     today: function() {
-      return moment().format(this.format)
+      return this.$moment().format(this.format)
     },
     gridTemplateColumns: function() {
       return `5.75rem repeat(${this.headers.length}, 1fr)`
@@ -100,8 +94,8 @@ export default {
       const dates = []
 
       for (let i = 0; i < this.endDay.diff(this.startDay, 'days'); i++) {
-        const currentDate = moment(this.startDay).add(i, 'days')
-        const isToday = moment().format(this.format) === currentDate.format(this.format)
+        const currentDate = this.$moment(this.startDay).add(i, 'days')
+        const isToday = this.$moment().format(this.format) === currentDate.format(this.format)
         const isStartOfMonth = currentDate.date() === 1
 
         dates.push({
@@ -118,10 +112,22 @@ export default {
       return dates
     }
   },
-  created: function() {
-    moment.locale(this.locale)
+  mounted: function() {
+    // load more items if there is empty space on the page
+    if (!this.isScrollable()) {
+      this.loadMore()
+    }
   },
   methods: {
+    loadMore: function() {
+      this.endDay = this.$moment(this.endDay).add(this.offset, 'days')
+      this.handleLoadMore(this.startDay.format(this.format), this.endDay.format(this.format))
+    },
+    isScrollable: function() {
+      const { scrollHeight, clientHeight } = this.$refs.scrollableContent
+
+      return scrollHeight !== clientHeight
+    },
     getEvents: function(date, type) {
       return filter(this.events, { date, type })
     },
@@ -138,9 +144,8 @@ export default {
       const { scrollHeight, scrollTop, clientHeight } = e.target
 
       if (scrollTop + clientHeight + 150 >= scrollHeight) {
-        this.endDay = moment(this.endDay).add(this.offset, 'days')
-
-        invoke(this, 'handleLoadMore', this.startDay.format(this.format), this.endDay.format(this.format))
+        console.log(e.target.offsetHeight, scrollTop)
+        this.loadMore()
       }
     }, 50)
   }
