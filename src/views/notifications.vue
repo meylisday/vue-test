@@ -7,8 +7,6 @@
       :headers="headers"
       :locale="locale"
     >
-      <!-- custom event and kebab-case with init custom event -->
-
       <!-- Dynamic Header Template -->
       <template v-slot:header="{ header }">
         <component :is="header.displayAs" :data="header" :add="addEvent" />
@@ -92,7 +90,7 @@ export default {
     }
   },
   methods: {
-    loadMore: (...params) => console.log(params), //spread operator
+    loadMore: (...params) => console.log(params),
     getColor: (headers, { type }) => get(find(headers, { type }), 'color', '#ccc'),
     addEvent: (...params) => console.log(params),
     viewEvent: (...params) => console.log(params)
