@@ -13,15 +13,16 @@
       <li
         v-for="({ isStartOfMonth, isToday, weekDay, day, formated, monthHeader }, index) in datesTable"
         :key="formated"
+        :ref="isToday ? 'today' : null"
         class="grid"
       >
         <div v-if="isStartOfMonth || !index" class="month-header">{{ monthHeader }}</div>
         <div :style="{ gridTemplateColumns }" class="row">
           <div class="cell">
-            <span :id="isToday ? 'today' : null" :class="{ today: isToday }" class="day">
-              {{ weekDay }}
+            <span :class="{ today: isToday }" class="day">
+              <strong>{{ weekDay }}</strong>
               <br />
-              {{ day }}
+              <strong>{{ day }}<strong>
             </span>
           </div>
           <div
@@ -134,16 +135,15 @@ export default {
       return find(this.events, { date, type })
     },
     scrollToToday: () => {
-      document.getElementById('today').scrollIntoView({
-        behavior: 'smooth',
-        block: 'end'
-      })
+      // Get offset of `today` element and assign to wrapper's scroll position
+      const { offsetTop } = get(this.$refs, 'today[0]', {});
+
+      this.$refs.scrollableContent.scrollTop = offsetTop;
     },
     handleScroll: debounce(function(e) {
       const { scrollHeight, scrollTop, clientHeight } = e.target
 
       if (scrollTop + clientHeight + 150 >= scrollHeight) {
-        console.log(e.target.offsetHeight, scrollTop)
         this.loadMore()
       }
     }, 50)
@@ -188,10 +188,13 @@ export default {
   flex-grow: 1;
   overflow: auto;
   min-height: 0;
+  position: relative;
+  scroll-behavior: smooth;
 }
 .grid {
   display: grid;
   margin-bottom: -1px;
+  position: relative;
 }
 .row {
   display: grid;
