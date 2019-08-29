@@ -11,11 +11,11 @@
     </div>
     <ul ref="scrollableContent" class="scrollable-content" @scroll="handleScroll">
       <li
-        v-for="({ isStartOfMonth, isToday, weekDay, day, year, formated, month }, index) in datesTable"
+        v-for="({ isStartOfMonth, isToday, weekDay, day, formated, monthHeader }, index) in datesTable"
         :key="formated"
         class="grid"
       >
-        <div v-if="isStartOfMonth || !index" class="month-separator">{{ month }}, {{ year }}</div>
+        <div v-if="isStartOfMonth || !index" class="month-header">{{ monthHeader }}</div>
         <div :style="{ gridTemplateColumns }" class="row">
           <div class="cell">
             <span :id="isToday ? 'today' : null" :class="{ today: isToday }" class="day">
@@ -103,9 +103,8 @@ export default {
           isToday,
           day: currentDate.format('D'),
           formated: currentDate.format(this.format),
-          month: currentDate.format('MMMM'),
           weekDay: currentDate.format('dd'),
-          year: currentDate.format('YYYY')
+          monthHeader: currentDate.format('MMMM, YYYY')
         })
       }
 
@@ -205,6 +204,7 @@ export default {
   min-height: 4.5rem;
   padding: 0.75rem;
   cursor: pointer;
+  position: relative;
 }
 .day {
   border-radius: 50%;
@@ -224,7 +224,17 @@ export default {
 .today:hover {
   background: #647cd2;
 }
-.month-separator {
+.today::before {
+  position: absolute;
+  height: 2px;
+  background-color: #42b983;
+  content: "";
+  top: 0;
+  height: 3px;
+  left: 0;
+  width: 100%;
+}
+.month-header {
   font-weight: bold;
   padding: 0.5rem 1rem;
   text-align: start;
