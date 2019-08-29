@@ -20,9 +20,9 @@
         <div :style="{ gridTemplateColumns }" class="row">
           <div class="cell">
             <span :class="{ today: isToday }" class="day">
-              <strong>{{ weekDay }}</strong>
+              <span>{{ weekDay }}</span>
               <br />
-              <strong>{{ day }}<strong>
+              <span>{{ day }}</span>
             </span>
           </div>
           <div
@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { debounce, find, filter } from 'lodash-es'
+import { debounce, get, find, filter } from 'lodash-es'
 
 export default {
   name: 'CalendarGrid',
@@ -134,11 +134,11 @@ export default {
     hasNotification: function(date, type) {
       return find(this.events, { date, type })
     },
-    scrollToToday: () => {
+    scrollToToday: function() {
       // Get offset of `today` element and assign to wrapper's scroll position
-      const { offsetTop } = get(this.$refs, 'today[0]', {});
+      const { offsetTop } = get(this.$refs, 'today[0]', {})
 
-      this.$refs.scrollableContent.scrollTop = offsetTop;
+      this.$refs.scrollableContent.scrollTop = offsetTop
     },
     handleScroll: debounce(function(e) {
       const { scrollHeight, scrollTop, clientHeight } = e.target
@@ -207,7 +207,6 @@ export default {
   min-height: 4.5rem;
   padding: 0.75rem;
   cursor: pointer;
-  position: relative;
 }
 .day {
   border-radius: 50%;
@@ -230,8 +229,8 @@ export default {
 .today::before {
   position: absolute;
   height: 2px;
-  background-color: #42b983;
-  content: "";
+  background-color: #6e8cfb;
+  content: '';
   top: 0;
   height: 3px;
   left: 0;
