@@ -205,6 +205,7 @@ export default {
   justify-content: center;
   margin: 0 0.1rem;
   min-height: 4.5rem;
+  min-width: 5.5rem;
   padding: 0.75rem;
   cursor: pointer;
 }
