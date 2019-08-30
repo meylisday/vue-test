@@ -11,17 +11,18 @@
     </div>
     <ul ref="scrollableContent" class="scrollable-content" @scroll="handleScroll">
       <li
-        v-for="({ isStartOfMonth, isToday, weekDay, day, year, formated, month }, index) in datesTable"
+        v-for="({ isStartOfMonth, isToday, weekDay, day, formated, monthHeader }, index) in datesTable"
         :key="formated"
+        :ref="isToday ? 'today' : null"
         class="grid"
       >
-        <div v-if="isStartOfMonth || !index" class="month-separator">{{ month }}, {{ year }}</div>
+        <div v-if="isStartOfMonth || !index" class="month-header">{{ monthHeader }}</div>
         <div :style="{ gridTemplateColumns }" class="row">
           <div class="cell">
-            <span :id="isToday ? 'today' : null" :class="{ today: isToday }" class="day">
-              {{ weekDay }}
+            <span :class="{ today: isToday }" class="day">
+              <span>{{ weekDay }}</span>
               <br />
-              {{ day }}
+              <span>{{ day }}</span>
             </span>
           </div>
           <div
@@ -45,7 +46,7 @@
 </template>
 
 <script>
-import { debounce, find, filter } from 'lodash-es'
+import { debounce, get, find, filter } from 'lodash-es'
 
 export default {
   name: 'CalendarGrid',
@@ -103,9 +104,8 @@ export default {
           isToday,
           day: currentDate.format('D'),
           formated: currentDate.format(this.format),
-          month: currentDate.format('MMMM'),
           weekDay: currentDate.format('dd'),
-          year: currentDate.format('YYYY')
+          monthHeader: currentDate.format('MMMM, YYYY')
         })
       }
 
@@ -134,17 +134,16 @@ export default {
     hasNotification: function(date, type) {
       return find(this.events, { date, type })
     },
-    scrollToToday: () => {
-      document.getElementById('today').scrollIntoView({
-        behavior: 'smooth',
-        block: 'end'
-      })
+    scrollToToday: function() {
+      // Get offset of `today` element and assign to wrapper's scroll position
+      const { offsetTop } = get(this.$refs, 'today[0]', {})
+
+      this.$refs.scrollableContent.scrollTop = offsetTop
     },
     handleScroll: debounce(function(e) {
       const { scrollHeight, scrollTop, clientHeight } = e.target
 
       if (scrollTop + clientHeight + 150 >= scrollHeight) {
-        console.log(e.target.offsetHeight, scrollTop)
         this.loadMore()
       }
     }, 50)
@@ -189,10 +188,13 @@ export default {
   flex-grow: 1;
   overflow: auto;
   min-height: 0;
+  position: relative;
+  scroll-behavior: smooth;
 }
 .grid {
   display: grid;
   margin-bottom: -1px;
+  position: relative;
 }
 .row {
   display: grid;
@@ -203,6 +205,7 @@ export default {
   justify-content: center;
   margin: 0 0.1rem;
   min-height: 4.5rem;
+  min-width: 5.5rem;
   padding: 0.75rem;
   cursor: pointer;
 }
@@ -224,7 +227,17 @@ export default {
 .today:hover {
   background: #647cd2;
 }
-.month-separator {
+.today::before {
+  position: absolute;
+  height: 2px;
+  background-color: #6e8cfb;
+  content: '';
+  top: 0;
+  height: 3px;
+  left: 0;
+  width: 100%;
+}
+.month-header {
   font-weight: bold;
   padding: 0.5rem 1rem;
   text-align: start;
