@@ -1,6 +1,6 @@
 <template>
   <div class="page-wrapper">
-    <event-modal v-if="true" :position="position" />
+    <event-modal v-if="isDisplay" :position="position" />
     <calendar-grid
       :events="events"
       :handle-event-creation="addEvent"
@@ -111,12 +111,12 @@ export default {
       console.log(event, rest)
     },
     viewEvent: function(event) {
-      const { offsetX, offsetY } = event
+      const { clientX, clientY } = event
 
       this.isDisplay = true
       this.position = {
-        left: `${offsetY}px`,
-        top: `${offsetX}px`
+        left: `${clientX}px`,
+        top: `${clientY}px`
       }
     }
   }
