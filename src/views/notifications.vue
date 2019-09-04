@@ -1,6 +1,6 @@
 <template>
   <div class="page-wrapper">
-    <event-modal v-if="true" :position="position"/>
+    <event-modal v-if="true" :position="position" />
     <calendar-grid
       :events="events"
       :handle-event-creation="addEvent"
@@ -108,15 +108,15 @@ export default {
     loadMore: (...params) => console.log(params),
     getColor: (headers, { type }) => get(find(headers, { type }), 'color', '#ccc'),
     addEvent: (event, ...rest) => {
-      console.log(event, rest) 
-      const {screenX, screenY } = event;
+      console.log(event, rest)
+      const { screenX, screenY } = event
 
-    //  this.isDisplay = true
+      //  this.isDisplay = true
       this.position = {
         top: `${screenY}px`,
         left: `${screenX}px`
       }
-      console.log(this.position);
+      console.log(this.position)
     },
     viewEvent: (...params) => console.log(params)
   }
