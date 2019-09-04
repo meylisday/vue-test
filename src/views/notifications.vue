@@ -1,5 +1,6 @@
 <template>
   <div class="page-wrapper">
+    <event-modal v-if="true" :position="position"/>
     <calendar-grid
       :events="events"
       :handle-event-creation="addEvent"
@@ -25,6 +26,7 @@
 import get from 'lodash-es/get'
 import find from 'lodash-es/find'
 
+import EventModal from '@/components/modal'
 import CalendarGrid from '@/components/calendar'
 import {
   CalendarEvent,
@@ -40,10 +42,16 @@ export default {
     CalendarEvent,
     CalendarHeaderBank,
     CalendarHeaderTasks,
-    CalendarHeaderTaxes
+    CalendarHeaderTaxes,
+    EventModal
   },
   data() {
     return {
+      position: {
+        top: 0,
+        left: 0
+      },
+      isDisplay: false,
       locale: 'ru',
       headers: [
         {
@@ -99,7 +107,17 @@ export default {
   methods: {
     loadMore: (...params) => console.log(params),
     getColor: (headers, { type }) => get(find(headers, { type }), 'color', '#ccc'),
-    addEvent: (...params) => console.log(params),
+    addEvent: (event, ...rest) => {
+      console.log(event, rest) 
+      const {screenX, screenY } = event;
+
+    //  this.isDisplay = true
+      this.position = {
+        top: `${screenY}px`,
+        left: `${screenX}px`
+      }
+      console.log(this.position);
+    },
     viewEvent: (...params) => console.log(params)
   }
 }
