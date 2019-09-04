@@ -107,18 +107,18 @@ export default {
   methods: {
     loadMore: (...params) => console.log(params),
     getColor: (headers, { type }) => get(find(headers, { type }), 'color', '#ccc'),
-    addEvent: (event, ...rest) => {
+    addEvent: function(event, ...rest) {
       console.log(event, rest)
-      const { screenX, screenY } = event
-
-      //  this.isDisplay = true
-      this.position = {
-        top: `${screenY}px`,
-        left: `${screenX}px`
-      }
-      console.log(this.position)
     },
-    viewEvent: (...params) => console.log(params)
+    viewEvent: function(event) {
+      const { offsetX, offsetY } = event
+
+      this.isDisplay = true
+      this.position = {
+        left: `${offsetY}px`,
+        top: `${offsetX}px`
+      }
+    }
   }
 }
 </script>
