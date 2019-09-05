@@ -1,6 +1,6 @@
 <template>
   <div class="page-wrapper">
-    <event-modal v-if="isDisplay" :position="position" />
+    <event-modal v-if="isDisplay" :position="position" :on-close="handleClick" />
     <calendar-grid
       :events="events"
       :handle-event-creation="addEvent"
@@ -51,6 +51,7 @@ export default {
         top: 0,
         left: 0
       },
+      selectedEvent: Object,
       isDisplay: false,
       locale: 'ru',
       headers: [
@@ -108,16 +109,20 @@ export default {
     loadMore: (...params) => console.log(params),
     getColor: (headers, { type }) => get(find(headers, { type }), 'color', '#ccc'),
     addEvent: function(event, ...rest) {
-      console.log(event, rest)
+      console.log(rest)
     },
-    viewEvent: function(event) {
+    viewEvent: function(event, ...rest) {
       const { clientX, clientY } = event
-
+      this.selectedEvent = rest
+      console.log(rest)
       this.isDisplay = true
       this.position = {
         left: `${clientX}px`,
         top: `${clientY}px`
       }
+    },
+    handleClick: function() {
+      this.isDisplay = false
     }
   }
 }

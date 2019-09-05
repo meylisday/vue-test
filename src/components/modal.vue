@@ -1,6 +1,6 @@
 <template>
   <div :style="position" class="wrapper-modal">
-    <b-button class="close" icon-left="close" />
+    <b-icon class="close" icon="close" @click.native="onClose" />
     <span class="label">Через 3 дня</span>
     <ul>
       <li>Текущий остаток: 2457 BYN</li>
@@ -27,11 +27,15 @@ export default {
       required: false,
       type: Object,
       default: () => {}
+    },
+    onClose: {
+      required: true,
+      type: Function
     }
   },
-  mounted: function() {
-    console.log(this.position)
-  },
+  // mounted: function() {
+  //   console.log(this.position)
+  // },
   methods: {}
 }
 </script>
@@ -88,10 +92,7 @@ ul li {
   font-size: 24px;
   border: 0;
   padding: 0;
-  height: 0;
-}
-.close > span.icon.is-small {
-  height: 0 !important;
-  width: 0 !important;
+  height: 10px;
+  cursor: pointer;
 }
 </style>
