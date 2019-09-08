@@ -1,7 +1,7 @@
 <template>
   <div :style="position" class="wrapper-modal">
     <b-icon class="close" icon="close" @click.native="onClose" />
-    <span class="label">Через 3 дня</span>
+    <span class="label">{{ fromNow }}</span>
     <ul>
       <li>Текущий остаток: 2457 BYN</li>
       <li>Сумма к оплате: 1378 BYN</li>
@@ -21,7 +21,7 @@
 // import './styles.css'
 
 export default {
-  name: 'EventModal',
+  name: 'EventViewModal',
   props: {
     position: {
       required: false,
@@ -31,12 +31,17 @@ export default {
     onClose: {
       required: true,
       type: Function
+    },
+    event: {
+      required: true,
+      type: Object
     }
   },
-  // mounted: function() {
-  //   console.log(this.position)
-  // },
-  methods: {}
+  computed: {
+    fromNow: function() {
+      return this.$moment(this.event.date).fromNow()
+    }
+  }
 }
 </script>
 <style scoped>

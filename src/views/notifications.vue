@@ -1,7 +1,15 @@
 <template>
   <div class="page-wrapper">
-    <event-modal v-if="isDisplay" :position="position" :on-close="handleClick" />
+    <event-view-modal v-if="isDisplayView" :position="position" :on-close="handleClose" :event="selectedEvent" />
+    <event-add-modal
+      v-if="isDisplayAdd"
+      :position="position"
+      :on-close="handleClose"
+      :event-data="newEventData"
+      :on-save="handleSave"
+    />
     <calendar-grid
+      :format="timeFormat"
       :events="events"
       :handle-event-creation="addEvent"
       :handle-load-more="loadMore"
@@ -25,8 +33,10 @@
 <script>
 import get from 'lodash-es/get'
 import find from 'lodash-es/find'
+import { FetchAPI } from '@/api'
 
-import EventModal from '@/components/modal'
+import EventViewModal from '@/components/event-view-modal'
+import EventAddModal from '@/components/event-add-modal'
 import CalendarGrid from '@/components/calendar'
 import {
   CalendarEvent,
@@ -43,16 +53,20 @@ export default {
     CalendarHeaderBank,
     CalendarHeaderTasks,
     CalendarHeaderTaxes,
-    EventModal
+    EventViewModal,
+    EventAddModal
   },
   data() {
     return {
+      timeFormat: 'YYYY-MM-DD',
       position: {
         top: 0,
         left: 0
       },
-      selectedEvent: Object,
-      isDisplay: false,
+      selectedEvent: null,
+      isDisplayView: false,
+      isDisplayAdd: false,
+      newEventData: null,
       locale: 'ru',
       headers: [
         {
@@ -80,49 +94,51 @@ export default {
           color: 'red'
         }
       ],
-      events: [
-        {
-          date: '08/29/2019',
-          type: 'taxes',
-          label: 'Отправить сведения о сделке',
-          number: 'Номер',
-          id: '1'
-        },
-        {
-          date: '08/30/2019',
-          type: 'bank',
-          label: 'Отправить сведения о сделке',
-          number: 'Номер',
-          id: '2'
-        },
-        {
-          date: '09/01/2019',
-          type: 'taxes',
-          label: 'Отправить сведения о сделке',
-          number: 'Номер',
-          id: '3'
-        }
-      ]
+      events: []
     }
+  },
+  mounted() {
+    this.events = FetchAPI.getAll()
   },
   methods: {
     loadMore: (...params) => console.log(params),
     getColor: (headers, { type }) => get(find(headers, { type }), 'color', '#ccc'),
-    addEvent: function(event, ...rest) {
-      console.log(rest)
+    addEvent: function(e, type, date) {
+      const { clientX, clientY } = e
+      this.isDisplayAdd = true
+      this.position = {
+        left: `${clientX}px`,
+        top: `${clientY}px`
+      }
+      this.newEventData = {
+        date,
+        type,
+        label: get(find(this.headers, { type }), 'label', '')
+      }
     },
-    viewEvent: function(event, ...rest) {
-      const { clientX, clientY } = event
-      this.selectedEvent = rest
-      console.log(rest)
-      this.isDisplay = true
+    viewEvent: function(e, event) {
+      const { clientX, clientY } = e
+      this.selectedEvent = event
+      this.isDisplayView = true
       this.position = {
         left: `${clientX}px`,
         top: `${clientY}px`
       }
     },
-    handleClick: function() {
-      this.isDisplay = false
+    handleClose: function() {
+      this.isDisplayView = false
+      this.isDisplayAdd = false
+      this.selectedEvent = null
+      this.newEventData = null
+    },
+    handleSave: function(newEvent) {
+      FetchAPI.postOne({
+        ...newEvent,
+        number: 'Номер',
+        id: (Math.random() * 1000000).toFixed(0).toString()
+      })
+      this.events = FetchAPI.getAll()
+      this.handleClose()
     }
   }
 }
