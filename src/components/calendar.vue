@@ -56,12 +56,12 @@ export default {
       type: Array
     },
     format: {
-      default: 'MM/DD/YYYY',
+      default: 'YYYY-MM-DD',
       required: false,
       type: String
     },
     offset: {
-      default: 5,
+      default: 10,
       required: false,
       type: Number
     },
