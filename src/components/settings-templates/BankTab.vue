@@ -28,7 +28,7 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&display=swap&subset=cyrillic');
 h1 {
-  margin-top: 63px;
+  margin-top: 40px;
   font-size: 20px;
   line-height: 23px;
 }

@@ -40,3 +40,16 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped></style>
+<style>
+.tabs {
+  margin-top: 48px;
+}
+.tabs ul li {
+  margin-right: 50px;
+  margin-left: 50px;
+}
+.tabs li.is-active a {
+  border-bottom-color: #769bff;
+  color: #769bff;
+}
+</style>

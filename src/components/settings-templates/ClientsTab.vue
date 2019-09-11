@@ -71,7 +71,7 @@ export default {
   margin-left: 12px;
 }
 h1 {
-  margin-top: 63px;
+  margin-top: 40px;
   font-size: 20px;
   line-height: 23px;
 }
