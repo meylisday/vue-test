@@ -34,3 +34,6 @@
   font-weight: 500;
   line-height: 0.9rem;
 }
+section{
+  height: 100vh;
+}

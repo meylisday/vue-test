@@ -1,0 +1,65 @@
+<template>
+  <div>
+    <h1>Настройки секции <b>Налоговая</b></h1>
+    <div class="form-wrapper">
+      <b-field label="Вид организации">
+        <b-input v-model="name"></b-input>
+      </b-field>
+      <b-field label="Банк">
+        <b-input v-model="name"></b-input>
+      </b-field>
+      <b-field label="Схема налогооблажения">
+        <b-input v-model="name"></b-input>
+      </b-field>
+      <b-field label="Расчетный счет">
+        <b-input v-model="name"></b-input>
+      </b-field>
+      <b-field label="Телефон инспектора">
+        <b-input v-model="name"></b-input>
+      </b-field>
+      <b-button type="is-primary">Сохранить</b-button>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'TaxesTab',
+  components: {},
+  data() {
+    return {}
+  }
+}
+</script>
+<style scoped>
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&display=swap&subset=cyrillic');
+h1 {
+  margin-top: 63px;
+  font-size: 20px;
+  line-height: 23px;
+}
+.form-wrapper {
+  width: 300px;
+  margin: auto;
+  margin-top: 48px;
+  text-align: left;
+}
+.is-primary {
+  width: 130px;
+  height: 45px;
+  background: #769bff;
+  border-radius: 3px;
+  font-family: 'Roboto', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 18px;
+  margin-top: 15px;
+}
+</style>
+
+<style>
+.text-input label {
+  font-weight: normal;
+}
+</style>
