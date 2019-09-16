@@ -8,10 +8,10 @@
         </b-field>
       </div>
       <div class="list-title">
-        <span>Контакты (n)</span>
+        <span>Контакты ({{ contacts.length }})</span>
       </div>
       <div class="items-list-wrapper">
-        <div v-for="person in contacts" :key="person.number" class="items-list">
+        <div v-for="person in contactsList" :key="person.number" class="items-list">
           <div class="items-list-details">
             <div class="items-list-details--picture">
               <contact-avatar :person-name="person.name" />
@@ -47,6 +47,11 @@ export default {
         { name: 'Ahntv', number: '+2343225025263' },
         { name: 'Ahntv', number: '+23422525002t3' }
       ]
+    }
+  },
+  computed: {
+    contactsList: function() {
+      return this.contacts.filter(item => item.number.includes(this.search) || item.name.includes(this.search))
     }
   }
 }

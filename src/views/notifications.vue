@@ -38,6 +38,8 @@ import { FetchAPI } from '@/api'
 import EventViewModal from '@/components/event-view-modal'
 import EventAddModal from '@/components/event-add-modal'
 import CalendarGrid from '@/components/calendar'
+import { headers, timeFormat, locale } from '@/config'
+
 import {
   CalendarEvent,
   CalendarHeaderBank,
@@ -58,7 +60,7 @@ export default {
   },
   data() {
     return {
-      timeFormat: 'YYYY-MM-DD',
+      timeFormat,
       position: {
         top: 0,
         left: 0
@@ -67,33 +69,8 @@ export default {
       isDisplayView: false,
       isDisplayAdd: false,
       newEventData: null,
-      locale: 'ru',
-      headers: [
-        {
-          type: 'bank',
-          label: 'Банк',
-          displayAs: 'calendar-header-bank',
-          color: '#66bb6a'
-        },
-        {
-          type: 'taxes',
-          label: 'Налоговая',
-          displayAs: 'calendar-header-taxes',
-          color: '#ffa726'
-        },
-        {
-          type: 'tasks',
-          label: 'Мои задачи',
-          displayAs: 'calendar-header-tasks',
-          color: 'blue'
-        },
-        {
-          type: 'clients',
-          label: 'Клиенты',
-          displayAs: 'calendar-header-tasks',
-          color: 'red'
-        }
-      ],
+      locale,
+      headers,
       events: []
     }
   },

@@ -12,7 +12,7 @@
     </div>
     <div class="group-bottom-button">
       <b-button type="is-light">Похожие документы</b-button>
-      <b-button type="is-light">Подробнее</b-button>
+      <b-button type="is-light" @click="navigateToDetails">Подробнее</b-button>
     </div>
   </div>
 </template>
@@ -40,6 +40,11 @@ export default {
   computed: {
     fromNow: function() {
       return this.$moment(this.event.date).fromNow()
+    }
+  },
+  methods: {
+    navigateToDetails: function() {
+      this.$router.push({ name: 'details', params: { id: this.event.id } })
     }
   }
 }
