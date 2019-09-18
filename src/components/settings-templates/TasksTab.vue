@@ -3,19 +3,19 @@
     <h1>Настройки секции <b>Мои задачи</b></h1>
     <div class="form-wrapper">
       <b-field label="Имя">
-        <b-input v-model="name"></b-input>
+        <b-input v-model="firstName"></b-input>
       </b-field>
       <b-field label="Фамилия">
-        <b-input v-model="name"></b-input>
+        <b-input v-model="lastName"></b-input>
       </b-field>
       <b-field label="Телефон">
-        <b-input v-model="name"></b-input>
+        <b-input v-model="phone"></b-input>
       </b-field>
       <b-field label="Номер счета">
-        <b-input v-model="name"></b-input>
+        <b-input v-model="accountNumber"></b-input>
       </b-field>
       <b-field label="УНП">
-        <b-input v-model="name"></b-input>
+        <b-input v-model="UNP"></b-input>
       </b-field>
       <b-button type="is-primary">Сохранить</b-button>
     </div>
@@ -25,9 +25,14 @@
 <script>
 export default {
   name: 'TasksTab',
-  components: {},
   data() {
-    return {}
+    return {
+      firstName: '',
+      lastName: '',
+      phone: '',
+      accountNumber: '',
+      UNP: ''
+    }
   }
 }
 </script>

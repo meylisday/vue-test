@@ -33,7 +33,7 @@
 <script>
 import get from 'lodash-es/get'
 import find from 'lodash-es/find'
-import { FetchAPI } from '@/api'
+import { EventAPI } from '@/api'
 
 import EventViewModal from '@/components/event-view-modal'
 import EventAddModal from '@/components/event-add-modal'
@@ -75,7 +75,7 @@ export default {
     }
   },
   mounted() {
-    this.events = FetchAPI.getAll()
+    this.events = EventAPI.getAll()
   },
   methods: {
     loadMore: (...params) => console.log(params),
@@ -109,12 +109,11 @@ export default {
       this.newEventData = null
     },
     handleSave: function(newEvent) {
-      FetchAPI.postOne({
+      EventAPI.postOne({
         ...newEvent,
-        number: 'Номер',
-        id: (Math.random() * 1000000).toFixed(0).toString()
+        number: 'Номер'
       })
-      this.events = FetchAPI.getAll()
+      this.events = EventAPI.getAll()
       this.handleClose()
     }
   }

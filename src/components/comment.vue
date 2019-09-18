@@ -5,13 +5,17 @@
     </div>
     <div class="block-centered">
       <span class="comment-time">{{ fromNow }}</span>
-      <b-icon class="delete-button" icon="delete-outline"></b-icon>
+      <b-button class="delete-button" type="is-text" icon-left="delete-outline" @click="deleteComment"></b-button>
     </div>
   </div>
 </template>
 <script>
 export default {
   props: {
+    messageId: {
+      required: true,
+      type: String
+    },
     messageText: {
       required: true,
       type: String
@@ -19,11 +23,21 @@ export default {
     messageTime: {
       required: true,
       type: String
+    },
+    onDelete: {
+      required: true,
+      type: Function
     }
   },
   computed: {
     fromNow: function() {
       return this.$moment(this.messageTime).calendar()
+    }
+  },
+  methods: {
+    deleteComment: function() {
+      console.log(this.messageId)
+      this.onDelete(this.messageId)
     }
   }
 }
@@ -47,5 +61,13 @@ export default {
 .block-centered {
   display: flex;
   align-items: center;
+}
+.button.is-text:focus {
+  box-shadow: unset;
+}
+.button.is-text:hover,
+.button.is-text:active {
+  background: unset;
+  color: unset;
 }
 </style>

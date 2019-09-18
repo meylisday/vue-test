@@ -2,19 +2,29 @@ import findIndex from 'lodash-es/findIndex'
 import find from 'lodash-es/find'
 import moment from 'moment'
 
-export class FetchAPI {
+export const generateId = () => (Math.random() * 10000000 + Math.random() * 10000000).toFixed(0).toString()
+
+export class EventAPI {
   static collection = [
     {
       date: '2019-09-10',
       type: 'taxes',
       label: 'Отправить сведения о сделке',
       number: 'Номер',
-      id: '1',
+      id: '34534576',
       modified: '2019-09-15T12:45:00',
-      created: '2019-09-15T12:45:00',
+      created: '2019-09-15T12:46:00',
       comments: [
-        { text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', time: '2019-09-15T12:45:00' },
-        { text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', time: '2019-09-15T12:45:00' }
+        {
+          id: '53534534',
+          text: 'Consectetur adipiscing elit.',
+          time: '2019-09-15T12:45:00'
+        },
+        {
+          id: '87423443',
+          text: 'Lorem ipsum dolor sit amet.',
+          time: '2019-09-15T12:45:00'
+        }
       ]
     },
     {
@@ -22,7 +32,7 @@ export class FetchAPI {
       type: 'bank',
       label: 'Отправить сведения о сделке',
       number: 'Номер',
-      id: '2',
+      id: '454564456',
       created: '2019-09-15T12:45:00'
     },
     {
@@ -30,7 +40,7 @@ export class FetchAPI {
       type: 'taxes',
       label: 'Отправить сведения о сделке',
       number: 'Номер',
-      id: '3',
+      id: '9769789645',
       created: '2019-09-15T12:45:00'
     }
   ]
@@ -38,7 +48,6 @@ export class FetchAPI {
     return find(this.collection, { id })
   }
   static getAll() {
-    //console.log(this.collection)
     return this.collection
   }
   static putOne(id, event) {
@@ -47,7 +56,6 @@ export class FetchAPI {
     return event
   }
   static postOne(event) {
-    console.log(event)
-    return this.collection.push({ ...event, created: moment().format() })
+    return this.collection.push({ id: generateId(), ...event, created: moment().format() })
   }
 }

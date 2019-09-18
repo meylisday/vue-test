@@ -32,7 +32,13 @@
     </div>
     <div class="comment-block">
       <b-field>
-        <b-input v-model="commentInput" placeholder="Добавить комментарий" class="comment-add"> </b-input>
+        <b-input
+          v-model="commentInput"
+          placeholder="Добавить комментарий"
+          class="comment-add"
+          @keyup.native.enter="sendComment"
+        >
+        </b-input>
       </b-field>
       <b-button
         :disabled="!commentInput"
@@ -42,7 +48,14 @@
         @click="sendComment"
       ></b-button>
     </div>
-    <comment v-for="(item, index) in comments" :key="index" :message-text="item.text" :message-time="item.time" />
+    <comment
+      v-for="item in comments"
+      :key="item.id"
+      :message-id="item.id"
+      :message-text="item.text"
+      :message-time="item.time"
+      :on-delete="deleteComment"
+    />
     <div class="wrapper-is-primary"><b-button type="is-primary" @click="saveDetails">Сохранить</b-button></div>
   </section>
 </template>
@@ -52,7 +65,8 @@ import { BankTab, TaxesTab, TasksTab, ClientsTab } from '@/components/settings-t
 import Comment from '@/components/comment'
 import get from 'lodash-es/get'
 import find from 'lodash-es/find'
-import { FetchAPI } from '@/api'
+import pull from 'lodash-es/pull'
+import { generateId, EventAPI } from '@/api'
 import { headers } from '@/config'
 export default {
   name: 'Settings',
@@ -82,31 +96,40 @@ export default {
     }
   },
   mounted() {
-    const event = FetchAPI.getOne(this.$route.params.id)
+    const event = EventAPI.getOne(this.$route.params.id)
     this.comments = event.comments || []
     this.lastUpdated = event.modified || event.created
     this.textareaMessage = event.label
     this.eventDate = event.date
     this.type = get(find(headers, { type: event.type }), 'label')
-
-    console.log(FetchAPI.getOne(this.$route.params.id))
   },
   methods: {
     sendComment: function() {
+      console.log(generateId())
       this.comments.push({
         text: this.commentInput,
-        time: this.$moment().format()
+        time: this.$moment().format(),
+        id: generateId()
       })
-      const event = FetchAPI.getOne(this.$route.params.id)
+      const event = EventAPI.getOne(this.$route.params.id)
       const newEvent = { ...event, comments: this.comments }
-      FetchAPI.putOne(event.id, newEvent)
+      EventAPI.putOne(event.id, newEvent)
+      this.commentInput = ''
+    },
+    deleteComment: function(id) {
+      const comment = find(this.comments, { id })
+      this.comments = [...pull(this.comments, comment)] // Copy `this.comments` items to new array
+
+      const event = EventAPI.getOne(this.$route.params.id)
+      const updatedEvent = { ...event, comments: this.comments }
+      EventAPI.putOne(event.id, updatedEvent)
       this.commentInput = ''
     },
     saveDetails: function() {
       this.lastUpdated = this.$moment().format()
-      const event = FetchAPI.getOne(this.$route.params.id)
+      const event = EventAPI.getOne(this.$route.params.id)
       const newEvent = { ...event, label: this.textareaMessage, modified: this.$moment().format() }
-      FetchAPI.putOne(event.id, newEvent)
+      EventAPI.putOne(event.id, newEvent)
     }
   }
 }

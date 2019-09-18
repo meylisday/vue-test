@@ -3,19 +3,19 @@
     <h1>Настройки секции <b>Налоговая</b></h1>
     <div class="form-wrapper">
       <b-field label="Вид организации">
-        <b-input v-model="name"></b-input>
+        <b-input v-model="organizationType"></b-input>
       </b-field>
       <b-field label="Банк">
-        <b-input v-model="name"></b-input>
+        <b-input v-model="bank"></b-input>
       </b-field>
       <b-field label="Схема налогооблажения">
-        <b-input v-model="name"></b-input>
+        <b-input v-model="taxSchema"></b-input>
       </b-field>
       <b-field label="Расчетный счет">
-        <b-input v-model="name"></b-input>
+        <b-input v-model="accountNumber"></b-input>
       </b-field>
       <b-field label="Телефон инспектора">
-        <b-input v-model="name"></b-input>
+        <b-input v-model="inspectorPhone"></b-input>
       </b-field>
       <b-button type="is-primary">Сохранить</b-button>
     </div>
@@ -25,9 +25,14 @@
 <script>
 export default {
   name: 'TaxesTab',
-  components: {},
   data() {
-    return {}
+    return {
+      organizationType: '',
+      bank: '',
+      taxSchema: '',
+      accountNumber: '',
+      inspectorPhone: ''
+    }
   }
 }
 </script>

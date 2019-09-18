@@ -3,13 +3,13 @@
     <h1>Настройки секции <b>Банк</b></h1>
     <div class="form-wrapper">
       <b-field label="Реквизиты" class="text-input">
-        <b-input v-model="name"></b-input>
+        <b-input v-model="requisites"></b-input>
       </b-field>
       <b-field label="Счет" class="text-input">
-        <b-input v-model="name"></b-input>
+        <b-input v-model="account"></b-input>
       </b-field>
       <b-field label="Имя операциониста" class="text-input">
-        <b-input v-model="name"></b-input>
+        <b-input v-model="operatorName"></b-input>
       </b-field>
       <b-button type="is-primary">Сохранить</b-button>
     </div>
@@ -19,9 +19,12 @@
 <script>
 export default {
   name: 'BankTab',
-  components: {},
   data() {
-    return {}
+    return {
+      requisites: '',
+      account: '',
+      operatorName: ''
+    }
   }
 }
 </script>
