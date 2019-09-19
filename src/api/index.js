@@ -1,4 +1,4 @@
-import findIndex from 'lodash-es/findIndex'
+import pull from 'lodash-es/pull'
 import find from 'lodash-es/find'
 import moment from 'moment'
 
@@ -51,9 +51,17 @@ export class EventAPI {
     return this.collection
   }
   static putOne(id, event) {
-    const eventIndex = findIndex(this.collection, { id })
-    this.collection[eventIndex] = { ...event, modified: moment().format() }
-    return event
+    const oldEvent = find(this.collection, { id })
+    const updatedEvent = {
+      ...oldEvent,
+      ...event,
+      modified: moment().format()
+    }
+
+    this.collection = pull(this.collection, oldEvent)
+    this.collection.push(updatedEvent)
+
+    return updatedEvent
   }
   static postOne(event) {
     return this.collection.push({ id: generateId(), ...event, created: moment().format() })

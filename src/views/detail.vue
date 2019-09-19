@@ -105,31 +105,36 @@ export default {
   },
   methods: {
     sendComment: function() {
-      console.log(generateId())
       this.comments.push({
         text: this.commentInput,
         time: this.$moment().format(),
         id: generateId()
       })
-      const event = EventAPI.getOne(this.$route.params.id)
-      const newEvent = { ...event, comments: this.comments }
-      EventAPI.putOne(event.id, newEvent)
       this.commentInput = ''
+
+      const partialEventUpdate = {
+        comments: this.comments
+      }
+
+      EventAPI.putOne(this.$route.params.id, partialEventUpdate)
     },
     deleteComment: function(id) {
-      const comment = find(this.comments, { id })
-      this.comments = [...pull(this.comments, comment)] // Copy `this.comments` items to new array
+      const comment = find(this.comments, { id }) //Find comment to delete
+      this.comments = [...pull(this.comments, comment)] // Make cope of this.comments and re-asign it (to trigger DOM update)
+      const partialEventUpdate = {
+        comments: this.comments
+      }
 
-      const event = EventAPI.getOne(this.$route.params.id)
-      const updatedEvent = { ...event, comments: this.comments }
-      EventAPI.putOne(event.id, updatedEvent)
-      this.commentInput = ''
+      EventAPI.putOne(this.$route.params.id, partialEventUpdate)
     },
     saveDetails: function() {
       this.lastUpdated = this.$moment().format()
-      const event = EventAPI.getOne(this.$route.params.id)
-      const newEvent = { ...event, label: this.textareaMessage, modified: this.$moment().format() }
-      EventAPI.putOne(event.id, newEvent)
+      const partialEventUpdate = {
+        label: this.textareaMessage,
+        modified: this.lastUpdated
+      }
+
+      EventAPI.putOne(this.$route.params.id, partialEventUpdate)
     }
   }
 }
