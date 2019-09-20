@@ -66,7 +66,7 @@ import Comment from '@/components/comment'
 import get from 'lodash-es/get'
 import find from 'lodash-es/find'
 import pull from 'lodash-es/pull'
-import { generateId, EventAPI } from '@/api'
+import { generateId, EventAPI, RemoteEventAPI } from '@/api'
 import { headers } from '@/config'
 export default {
   name: 'Settings',
@@ -96,12 +96,13 @@ export default {
     }
   },
   mounted() {
-    const event = EventAPI.getOne(this.$route.params.id)
-    this.comments = event.comments || []
-    this.lastUpdated = event.modified || event.created
-    this.textareaMessage = event.label
-    this.eventDate = event.date
-    this.type = get(find(headers, { type: event.type }), 'label')
+    RemoteEventAPI.getOne(this.$route.params.id).then(event => {
+      this.comments = event.comments || []
+      this.lastUpdated = event.modified || event.created
+      this.textareaMessage = event.label
+      this.eventDate = event.date
+      this.type = get(find(headers, { type: event.type }), 'label')
+    })
   },
   methods: {
     sendComment: function() {

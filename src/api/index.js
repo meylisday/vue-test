@@ -2,6 +2,8 @@ import pull from 'lodash-es/pull'
 import find from 'lodash-es/find'
 import moment from 'moment'
 
+const isLocal = true
+
 export const generateId = () => (Math.random() * 10000000 + Math.random() * 10000000).toFixed(0).toString()
 
 export class EventAPI {
@@ -63,6 +65,40 @@ export class EventAPI {
 
     return updatedEvent
   }
+  static postOne(event) {
+    return this.collection.push({ id: generateId(), ...event, created: moment().format() })
+  }
+}
+
+const host = isLocal ? 'http://localhost:3001' : 'http://gkhdfklghsdflkghdlkfsj'
+
+export class RemoteEventAPI {
+  static async getOne(id) {
+    const response = await fetch(`${host}/v2/event/${id}`)
+
+    return response.json()
+  }
+
+  static async getAll() {
+    const response = await fetch(`${host}/v2/event`)
+
+    return response.json()
+  }
+
+  static putOne(id, event) {
+    const oldEvent = find(this.collection, { id })
+    const updatedEvent = {
+      ...oldEvent,
+      ...event,
+      modified: moment().format()
+    }
+
+    this.collection = pull(this.collection, oldEvent)
+    this.collection.push(updatedEvent)
+
+    return updatedEvent
+  }
+
   static postOne(event) {
     return this.collection.push({ id: generateId(), ...event, created: moment().format() })
   }
