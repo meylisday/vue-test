@@ -33,11 +33,13 @@
 <script>
 import get from 'lodash-es/get'
 import find from 'lodash-es/find'
-import { FetchAPI } from '@/api'
+import { EventAPI } from '@/api'
 
 import EventViewModal from '@/components/event-view-modal'
 import EventAddModal from '@/components/event-add-modal'
 import CalendarGrid from '@/components/calendar'
+import { headers, timeFormat, locale } from '@/config'
+
 import {
   CalendarEvent,
   CalendarHeaderBank,
@@ -58,7 +60,7 @@ export default {
   },
   data() {
     return {
-      timeFormat: 'YYYY-MM-DD',
+      timeFormat,
       position: {
         top: 0,
         left: 0
@@ -67,38 +69,13 @@ export default {
       isDisplayView: false,
       isDisplayAdd: false,
       newEventData: null,
-      locale: 'ru',
-      headers: [
-        {
-          type: 'bank',
-          label: 'Банк',
-          displayAs: 'calendar-header-bank',
-          color: '#66bb6a'
-        },
-        {
-          type: 'taxes',
-          label: 'Налоговая',
-          displayAs: 'calendar-header-taxes',
-          color: '#ffa726'
-        },
-        {
-          type: 'tasks',
-          label: 'Мои задачи',
-          displayAs: 'calendar-header-tasks',
-          color: 'blue'
-        },
-        {
-          type: 'clients',
-          label: 'Клиенты',
-          displayAs: 'calendar-header-tasks',
-          color: 'red'
-        }
-      ],
+      locale,
+      headers,
       events: []
     }
   },
   mounted() {
-    this.events = FetchAPI.getAll()
+    this.events = EventAPI.getAll()
   },
   methods: {
     loadMore: (...params) => console.log(params),
@@ -132,12 +109,11 @@ export default {
       this.newEventData = null
     },
     handleSave: function(newEvent) {
-      FetchAPI.postOne({
+      EventAPI.postOne({
         ...newEvent,
-        number: 'Номер',
-        id: (Math.random() * 1000000).toFixed(0).toString()
+        number: 'Номер'
       })
-      this.events = FetchAPI.getAll()
+      this.events = EventAPI.getAll()
       this.handleClose()
     }
   }

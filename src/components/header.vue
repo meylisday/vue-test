@@ -24,7 +24,7 @@
               <router-link class="button is-light" to="/">
                 <img src="../assets/share.png" />
               </router-link>
-              <router-link class="button is-light" to="/notifications">
+              <router-link class="button is-light" to="/settings">
                 <img src="../assets/settings-icon.png" />
               </router-link>
               <router-link class="button is-light" to="/about">

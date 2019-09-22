@@ -1,43 +1,105 @@
-import findIndex from 'lodash-es/findIndex'
+import pull from 'lodash-es/pull'
+import find from 'lodash-es/find'
+import moment from 'moment'
 
-export class FetchAPI {
+const isLocal = true
+
+export const generateId = () => (Math.random() * 10000000 + Math.random() * 10000000).toFixed(0).toString()
+
+export class EventAPI {
   static collection = [
     {
       date: '2019-09-10',
       type: 'taxes',
       label: 'Отправить сведения о сделке',
       number: 'Номер',
-      id: '1'
+      id: '34534576',
+      modified: '2019-09-15T12:45:00',
+      created: '2019-09-15T12:46:00',
+      comments: [
+        {
+          id: '53534534',
+          text: 'Consectetur adipiscing elit.',
+          time: '2019-09-15T12:45:00'
+        },
+        {
+          id: '87423443',
+          text: 'Lorem ipsum dolor sit amet.',
+          time: '2019-09-15T12:45:00'
+        }
+      ]
     },
     {
       date: '2019-09-12',
       type: 'bank',
       label: 'Отправить сведения о сделке',
       number: 'Номер',
-      id: '2'
+      id: '454564456',
+      created: '2019-09-15T12:45:00'
     },
     {
       date: '2019-09-01',
       type: 'taxes',
       label: 'Отправить сведения о сделке',
       number: 'Номер',
-      id: '3'
+      id: '9769789645',
+      created: '2019-09-15T12:45:00'
     }
   ]
   static getOne(id) {
     return find(this.collection, { id })
   }
   static getAll() {
-    console.log(this.collection)
     return this.collection
   }
   static putOne(id, event) {
-    const eventIndex = findIndex(this.collection, { id })
-    this.collection[eventIndex] = event
-    return event
+    const oldEvent = find(this.collection, { id })
+    const updatedEvent = {
+      ...oldEvent,
+      ...event,
+      modified: moment().format()
+    }
+
+    this.collection = pull(this.collection, oldEvent)
+    this.collection.push(updatedEvent)
+
+    return updatedEvent
   }
   static postOne(event) {
-    console.log(event)
-    return this.collection.push(event)
+    return this.collection.push({ id: generateId(), ...event, created: moment().format() })
+  }
+}
+
+const host = isLocal ? 'http://localhost:3001' : 'http://gkhdfklghsdflkghdlkfsj'
+
+export class RemoteEventAPI {
+  static async getOne(id) {
+    const response = await fetch(`${host}/v2/event/${id}`)
+
+    return response.json()
+  }
+
+  static async getAll() {
+    const response = await fetch(`${host}/v2/event`)
+
+    return response.json()
+  }
+
+  static putOne(id, event) {
+    const oldEvent = find(this.collection, { id })
+    const updatedEvent = {
+      ...oldEvent,
+      ...event,
+      modified: moment().format()
+    }
+
+    this.collection = pull(this.collection, oldEvent)
+    this.collection.push(updatedEvent)
+
+    return updatedEvent
+  }
+
+  static postOne(event) {
+    return this.collection.push({ id: generateId(), ...event, created: moment().format() })
   }
 }
