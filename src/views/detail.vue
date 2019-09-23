@@ -97,7 +97,6 @@ export default {
   },
   mounted() {
     RemoteAPI.getEventById(this.$route.params.id).then(event => {
-      console.log(event)
       this.comments = event.comments || []
       this.lastUpdated = event.modified || event.created
       this.textareaMessage = event.label
@@ -106,18 +105,13 @@ export default {
     })
   },
   methods: {
-    sendComment: function() {
-      this.comments.push({
+    sendComment: async function() {
+      const comment = {
         text: this.commentInput,
         time: this.$moment().format()
-      })
-      this.commentInput = ''
-
-      const partialEventUpdate = {
-        comments: this.comments
       }
-
-      RemoteAPI.updateEvent(this.$route.params.id, partialEventUpdate)
+      this.commentInput = ''
+      this.comments.push(await RemoteAPI.createComment(this.$route.params.id, comment))
     },
     deleteComment: async function(id) {
       const comment = find(this.comments, { id }) //Find comment to delete
