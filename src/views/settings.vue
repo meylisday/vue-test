@@ -31,9 +31,6 @@ export default {
     return {
       selectedTab: 0
     }
-  },
-  updated() {
-    console.log(this.selectedTab)
   }
 }
 </script>

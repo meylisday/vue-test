@@ -17,12 +17,14 @@
       <b-field label="УНП">
         <b-input v-model="UNP"></b-input>
       </b-field>
-      <b-button type="is-primary">Сохранить</b-button>
+      <b-button type="is-primary" @click="saveSettings">Сохранить</b-button>
     </div>
   </div>
 </template>
 
 <script>
+import { RemoteAPI } from '@/api'
+
 export default {
   name: 'TasksTab',
   data() {
@@ -32,6 +34,34 @@ export default {
       phone: '',
       accountNumber: '',
       UNP: ''
+    }
+  },
+  mounted() {
+    this.getSettingsByType()
+  },
+  methods: {
+    setData: function(data) {
+      this.firstName = data.firstName
+      this.lastName = data.lastName
+      this.phone = data.phone
+      this.accountNumber = data.accountNumber
+      this.UNP = data.UNP
+    },
+    getSettingsByType: async function() {
+      const settings = await RemoteAPI.getSettings('tasks')
+
+      this.setData(settings)
+    },
+    saveSettings: async function() {
+      const settings = await RemoteAPI.updateSettings('tasks', {
+        firstName: this.firstName,
+        lastName: this.lastName,
+        phone: this.phone,
+        accountNumber: this.accountNumber,
+        UNP: this.UNP
+      })
+
+      this.setData(settings)
     }
   }
 }

@@ -33,7 +33,7 @@
 <script>
 import get from 'lodash-es/get'
 import find from 'lodash-es/find'
-import { EventAPI } from '@/api'
+import { RemoteAPI } from '@/api'
 
 import EventViewModal from '@/components/event-view-modal'
 import EventAddModal from '@/components/event-add-modal'
@@ -75,7 +75,9 @@ export default {
     }
   },
   mounted() {
-    this.events = EventAPI.getAll()
+    RemoteAPI.getEvents().then(events => {
+      this.events = events
+    })
   },
   methods: {
     loadMore: (...params) => console.log(params),
@@ -108,12 +110,12 @@ export default {
       this.selectedEvent = null
       this.newEventData = null
     },
-    handleSave: function(newEvent) {
-      EventAPI.postOne({
+    handleSave: async function(newEvent) {
+      await RemoteAPI.createEvent({
         ...newEvent,
         number: 'Номер'
       })
-      this.events = EventAPI.getAll()
+      this.events = await RemoteAPI.getEvents()
       this.handleClose()
     }
   }

@@ -17,12 +17,14 @@
       <b-field label="Телефон инспектора">
         <b-input v-model="inspectorPhone"></b-input>
       </b-field>
-      <b-button type="is-primary">Сохранить</b-button>
+      <b-button type="is-primary" @click="saveSettings">Сохранить</b-button>
     </div>
   </div>
 </template>
 
 <script>
+import { RemoteAPI } from '@/api'
+
 export default {
   name: 'TaxesTab',
   data() {
@@ -32,6 +34,34 @@ export default {
       taxSchema: '',
       accountNumber: '',
       inspectorPhone: ''
+    }
+  },
+  created() {
+    this.getSettingsByType()
+  },
+  methods: {
+    setData: function(data) {
+      this.organizationType = data.organizationType
+      this.bank = data.bank
+      this.taxSchema = data.taxSchema
+      this.accountNumber = data.accountNumber
+      this.inspectorPhone = data.inspectorPhone
+    },
+    getSettingsByType: async function() {
+      const settings = await RemoteAPI.getSettings('taxes')
+
+      this.setData(settings)
+    },
+    saveSettings: async function() {
+      const settings = await RemoteAPI.updateSettings('taxes', {
+        organizationType: this.organizationType,
+        bank: this.bank,
+        taxSchema: this.taxSchema,
+        accountNumber: this.accountNumber,
+        inspectorPhone: this.inspectorPhone
+      })
+
+      this.setData(settings)
     }
   }
 }
