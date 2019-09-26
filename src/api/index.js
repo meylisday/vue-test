@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const isLocal = true
+const isLocal = false
 const host = isLocal ? 'http://localhost:8081' : 'https://swagger-server-test.herokuapp.com'
 
 export class RemoteAPI {
@@ -24,6 +24,12 @@ export class RemoteAPI {
 
   static async createEvent(event) {
     const response = await axios.post(`${host}/v2/event`, event)
+
+    return response.data
+  }
+
+  static async deleteEvent(id) {
+    const response = await axios.delete(`${host}/v2/event/${id}`)
 
     return response.data
   }

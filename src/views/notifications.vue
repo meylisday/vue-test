@@ -24,7 +24,12 @@
 
       <!-- Dynamic Notification Template -->
       <template v-slot:event="{ event }">
-        <calendar-event :event="event" :color="getColor(headers, event)" @click.native="viewEvent($event, event)" />
+        <calendar-event
+          :event="event"
+          :color="getColor(headers, event)"
+          :view-event="viewEvent"
+          :delete-event="deleteEvent"
+        />
       </template>
     </calendar-grid>
   </div>
@@ -103,6 +108,13 @@ export default {
         left: `${clientX}px`,
         top: `${clientY}px`
       }
+    },
+    deleteEvent: async function(eventId) {
+      await RemoteAPI.deleteEvent(eventId)
+
+      RemoteAPI.getEvents().then(events => {
+        this.events = events
+      })
     },
     handleClose: function() {
       this.isDisplayView = false
