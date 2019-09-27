@@ -23,4 +23,7 @@ export default {
 #app {
   text-align: center;
 }
+section.datepicker-table {
+  display: block !important;
+}
 </style>

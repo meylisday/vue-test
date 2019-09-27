@@ -24,7 +24,12 @@
 
       <!-- Dynamic Notification Template -->
       <template v-slot:event="{ event }">
-        <calendar-event :event="event" :color="getColor(headers, event)" @click.native="viewEvent($event, event)" />
+        <calendar-event
+          :event="event"
+          :color="getColor(headers, event)"
+          :view-event="viewEvent"
+          :delete-event="deleteEvent"
+        />
       </template>
     </calendar-grid>
   </div>
@@ -33,7 +38,7 @@
 <script>
 import get from 'lodash-es/get'
 import find from 'lodash-es/find'
-import { EventAPI } from '@/api'
+import { RemoteAPI } from '@/api'
 
 import EventViewModal from '@/components/event-view-modal'
 import EventAddModal from '@/components/event-add-modal'
@@ -75,7 +80,9 @@ export default {
     }
   },
   mounted() {
-    this.events = EventAPI.getAll()
+    RemoteAPI.getEvents().then(events => {
+      this.events = events
+    })
   },
   methods: {
     loadMore: (...params) => console.log(params),
@@ -102,18 +109,25 @@ export default {
         top: `${clientY}px`
       }
     },
+    deleteEvent: async function(eventId) {
+      await RemoteAPI.deleteEvent(eventId)
+
+      RemoteAPI.getEvents().then(events => {
+        this.events = events
+      })
+    },
     handleClose: function() {
       this.isDisplayView = false
       this.isDisplayAdd = false
       this.selectedEvent = null
       this.newEventData = null
     },
-    handleSave: function(newEvent) {
-      EventAPI.postOne({
+    handleSave: async function(newEvent) {
+      await RemoteAPI.createEvent({
         ...newEvent,
         number: 'Номер'
       })
-      this.events = EventAPI.getAll()
+      this.events = await RemoteAPI.getEvents()
       this.handleClose()
     }
   }

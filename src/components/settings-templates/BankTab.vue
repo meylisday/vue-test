@@ -11,12 +11,14 @@
       <b-field label="Имя операциониста" class="text-input">
         <b-input v-model="operatorName"></b-input>
       </b-field>
-      <b-button type="is-primary">Сохранить</b-button>
+      <b-button type="is-primary" @click="saveSettings">Сохранить</b-button>
     </div>
   </div>
 </template>
 
 <script>
+import { RemoteAPI } from '@/api'
+
 export default {
   name: 'BankTab',
   data() {
@@ -24,6 +26,30 @@ export default {
       requisites: '',
       account: '',
       operatorName: ''
+    }
+  },
+  mounted() {
+    this.getSettingsByType()
+  },
+  methods: {
+    setData: function(data) {
+      this.requisites = data.requisites
+      this.account = data.account
+      this.operatorName = data.operatorName
+    },
+    getSettingsByType: async function() {
+      const settings = await RemoteAPI.getSettings('bank')
+
+      this.setData(settings)
+    },
+    saveSettings: async function() {
+      const settings = await RemoteAPI.updateSettings('bank', {
+        requisites: this.requisites,
+        account: this.account,
+        operatorName: this.operatorName
+      })
+
+      this.setData(settings)
     }
   }
 }

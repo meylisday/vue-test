@@ -66,7 +66,7 @@ import Comment from '@/components/comment'
 import get from 'lodash-es/get'
 import find from 'lodash-es/find'
 import pull from 'lodash-es/pull'
-import { generateId, EventAPI, RemoteEventAPI } from '@/api'
+import { RemoteAPI } from '@/api'
 import { headers } from '@/config'
 export default {
   name: 'Settings',
@@ -96,7 +96,7 @@ export default {
     }
   },
   mounted() {
-    RemoteEventAPI.getOne(this.$route.params.id).then(event => {
+    RemoteAPI.getEventById(this.$route.params.id).then(event => {
       this.comments = event.comments || []
       this.lastUpdated = event.modified || event.created
       this.textareaMessage = event.label
@@ -105,28 +105,22 @@ export default {
     })
   },
   methods: {
-    sendComment: function() {
-      this.comments.push({
+    sendComment: async function() {
+      const comment = {
         text: this.commentInput,
-        time: this.$moment().format(),
-        id: generateId()
-      })
+        time: this.$moment().format()
+      }
       this.commentInput = ''
-
-      const partialEventUpdate = {
-        comments: this.comments
-      }
-
-      EventAPI.putOne(this.$route.params.id, partialEventUpdate)
+      this.comments.push(await RemoteAPI.createComment(this.$route.params.id, comment))
     },
-    deleteComment: function(id) {
+    deleteComment: async function(id) {
       const comment = find(this.comments, { id }) //Find comment to delete
-      this.comments = [...pull(this.comments, comment)] // Make cope of this.comments and re-asign it (to trigger DOM update)
-      const partialEventUpdate = {
-        comments: this.comments
-      }
 
-      EventAPI.putOne(this.$route.params.id, partialEventUpdate)
+      if (comment) {
+        await RemoteAPI.deleteComment(this.$route.params.id, id)
+
+        this.comments = [...pull(this.comments, comment)] // Make cope of this.comments and re-asign it (to trigger DOM update)
+      }
     },
     saveDetails: function() {
       this.lastUpdated = this.$moment().format()
@@ -135,7 +129,7 @@ export default {
         modified: this.lastUpdated
       }
 
-      EventAPI.putOne(this.$route.params.id, partialEventUpdate)
+      RemoteAPI.updateEvent(this.$route.params.id, partialEventUpdate)
     }
   }
 }

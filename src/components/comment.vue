@@ -36,7 +36,6 @@ export default {
   },
   methods: {
     deleteComment: function() {
-      console.log(this.messageId)
       this.onDelete(this.messageId)
     }
   }
